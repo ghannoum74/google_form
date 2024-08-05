@@ -113,6 +113,15 @@ img {
   display: none;
 }
 
+/*invalid Inputs*/
+.container-input.invalid .each-errorMsg {
+  display: block;
+}
+
+.container-input.invalid .each-input {
+  border: 1px solid var(--errorColor);
+}
+
 .each-input:invalid[focus="true"] {
   border: 1px solid var(--errorColor);
 }
@@ -146,13 +155,6 @@ img {
   cursor: pointer;
   text-decoration: none;
 }
-
-/* .rightBtn {
-  color: var(--blue);
-  cursor: pointer;
-  text-decoration: none;
-  color: #fff;
-} */
 
 .rightBtn {
   border: none;
