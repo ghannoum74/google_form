@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FormButton from "./FormButton";
 import FormHeader from "./FormHeader";
 import useValidation from "../hook/useValidation";
+import { useDispatch } from "react-redux";
+import { updateData } from "../redux/states/fullDataSlice";
 
 interface InputProps {
   id: number;
@@ -28,12 +30,15 @@ interface EachFormProps {
 }
 
 const EachForm: React.FC<EachFormProps> = ({ item }) => {
+  // this state like general state so each component put in it key input and value different to the next component so you cannot initialize it
+  // and after each succesfull entered data and goes to the next route it dispatch the useState's data and store it to redux store
   const [value, setValue] = useState({});
 
   // import useValidation hook to validate the value with the pattern
   const { validate, invalidInputs } = useValidation();
 
   // dispatch to update data
+  const dispatch = useDispatch();
 
   const handleData = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -45,17 +50,15 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
 
     // first validate the inputs value object
     validate(value, item.pattern);
-    console.log(invalidInputs);
 
     // check after validate in invalidInputs contain any invalid input
     if (invalidInputs.length == 0) {
-      console.log("true");
-    } else {
-      console.log("false");
+      Object.entries(value).forEach(([key, value]) => {
+        dispatch(updateData({ key, value }));
+      });
     }
   };
 
-  useEffect(() => {});
   return (
     <div className="form-container" key={item.id}>
       <FormHeader header={item.header} caption={item.caption} />
