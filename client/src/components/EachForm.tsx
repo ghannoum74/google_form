@@ -1,4 +1,7 @@
-import FormHeader from "../utilities/FormHeader";
+import { useEffect, useState } from "react";
+import FormButton from "./FormButton";
+import FormHeader from "./FormHeader";
+import useValidation from "../hook/useValidation";
 
 interface InputProps {
   id: number;
@@ -6,7 +9,6 @@ interface InputProps {
   name: string;
   type: string;
   required: boolean;
-  pattern?: string;
   label: string;
   errorsMsgs?: string;
 }
@@ -16,6 +18,7 @@ interface ItemProps {
   header: string;
   caption: string;
   inputs: InputProps[];
+  pattern: string;
   leftBtn: string;
   rightBtn: string;
 }
@@ -25,28 +28,44 @@ interface EachFormProps {
 }
 
 const EachForm: React.FC<EachFormProps> = ({ item }) => {
-  console.log(item);
+  const [value, setValue] = useState({});
+
+  // import useValidation hook to validate the value with the pattern
+  const { validate, invalidInputs } = useValidation();
+
+  const handleData = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setValue((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleForm = (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // first validate the inputs value object
+    validate(value, item.pattern);
+
+    // check after validate in invalidInputs contain any invalid input
+  };
+  useEffect(() => {});
   return (
     <div className="form-container" key={item.id}>
       <FormHeader header={item.header} caption={item.caption} />
-      <form>
+      <form className="auth-form" onSubmit={handleForm}>
         {item.inputs.map((input) => (
-          <>
+          <div className="container-input" key={input.id}>
             <input
+              className="each-input"
               key={input.id}
               required={input.required}
               name={input.name}
               type={input.type}
-              pattern={input.pattern}
+              onChange={handleData}
             />
-            <label>{input.label}</label>
-            <div className="errormsg">{input.errorsMsgs}</div>
-          </>
+            <label className="each-label">{input.label}</label>
+            <div className="each-errorMsg">{input.errorsMsgs}</div>
+          </div>
         ))}
-        <div className="btns">
-          <button className="leftBtn">{item.leftBtn}</button>
-          <button className="leftBtn">{item.rightBtn}</button>
-        </div>
+        <FormButton leftBtn={item.leftBtn} rightBtn={item.rightBtn} />
       </form>
     </div>
   );
