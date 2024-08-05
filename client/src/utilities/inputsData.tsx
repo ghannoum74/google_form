@@ -10,7 +10,7 @@ export const inputsData = [
         name: "firstname",
         type: "text",
         required: true,
-        pattern: "^[A-Za-z]+(?:[ '-][A-Za-z]+)*$",
+
         label: "First Name",
         errorsMsgs:
           "Sorry, only letters (a-z), numbers (0-9), and periods (.) are allowed.",
@@ -20,12 +20,12 @@ export const inputsData = [
         name: "lastname",
         type: "text",
         required: true,
-        pattern: "^[A-Za-z]+(?:[ '-][A-Za-z]+)*$",
         label: "Last Name (optional)",
         errorsMsgs:
           "Sorry, only letters (a-z), numbers (0-9), and periods (.) are allowed.",
       },
     ],
+    pattern: "^[A-Za-z]+(?:[ '\\-][A-Za-z]+)*$",
     leftBtn: "i have already an account",
     rightBtn: "Next",
   },

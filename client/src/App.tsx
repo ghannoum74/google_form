@@ -1,13 +1,10 @@
-import "./App.css";
-import EachForm from "./components/EachForm";
-import { inputsData } from "./utilities/inputsData";
+import "./css/App.css";
+import Fullname from "./pages/Fullname";
 
 function App() {
   return (
     <>
-      {inputsData.map((item) => (
-        <EachForm key={item.id} item={item} />
-      ))}
+      <Fullname />
     </>
   );
 }
