@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 interface FormButtonProps {
   leftBtn: string;
@@ -7,7 +8,9 @@ interface FormButtonProps {
 const FormButton: React.FC<FormButtonProps> = ({ leftBtn, rightBtn }) => {
   return (
     <div className="button-container">
-      <a className="leftBtn">{leftBtn}</a>
+      <Link to={"/LoginPage"} className="leftBtn">
+        {leftBtn}
+      </Link>
       <button className="rightBtn">{rightBtn}</button>
     </div>
   );
