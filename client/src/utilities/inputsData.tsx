@@ -4,6 +4,7 @@ export const inputsData = [
     name: "fullname",
     header: "Create A GHANNACOUNT",
     caption: "Enter your Full name",
+    next_route: "/basic-information",
     inputs: [
       {
         id: 1,
@@ -11,7 +12,6 @@ export const inputsData = [
         type: "text",
         required: true,
         label: "First Name",
-        pattern: "^[A-Za-z]+(?:[ '\\-][A-Za-z]+)*$",
         errorsMsgs:
           "Sorry, only letters (a-z), numbers (0-9), and periods (.) are allowed.",
       },
@@ -21,12 +21,12 @@ export const inputsData = [
         type: "text",
         required: true,
         label: "Last Name (optional)",
-        pattern: "^[A-Za-z]+(?:[ '\\-][A-Za-z]+)*$",
         errorsMsgs:
           "Sorry, only letters (a-z), numbers (0-9), and periods (.) are allowed.",
       },
     ],
 
+    pattern: "^[A-Za-z]+(?:[ '\\-][A-Za-z]+)*$",
     leftBtn: "i have already an account",
     rightBtn: "Next",
   },
@@ -35,6 +35,7 @@ export const inputsData = [
     name: "basicData",
     header: "Basic information",
     caption: "Enter your birthday and gender",
+    next_route: "/email-information",
     inputs: [
       {
         id: 1,
