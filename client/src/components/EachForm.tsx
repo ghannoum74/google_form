@@ -4,6 +4,7 @@ import FormHeader from "./FormHeader";
 import useValidation from "../hook/useValidation";
 import { useDispatch } from "react-redux";
 import { updateData } from "../redux/states/fullDataSlice";
+import { useNavigate } from "react-router-dom";
 
 interface InputProps {
   id: number;
@@ -12,7 +13,7 @@ interface InputProps {
   required: boolean;
   label: string;
   errorsMsgs?: string;
-  pattern: string;
+
   min: number;
   max: number;
 }
@@ -28,6 +29,7 @@ interface ItemProps {
   id: number;
   header: string;
   caption: string;
+  pattern: string;
   inputs: InputProps[];
   selectData?: SelectProps[];
   leftBtn: string;
@@ -45,9 +47,13 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
 
   // import useValidation hook to validate the value with the pattern
   const { validate, invalidInputs } = useValidation();
+  // console.log(invalidInputs);
 
   // dispatch to update data
   const dispatch = useDispatch();
+
+  // to navigate to the next route when everything is done
+  const navigate = useNavigate();
 
   const handleData = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -60,14 +66,16 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
     e.preventDefault();
 
     // first validate the inputs value object
-    item.inputs.map((input) => {
-      validate(value, input.pattern);
-    });
+    const isValid = validate(value, item.pattern);
 
-    // check after validate in invalidInputs contain any invalid input
-    if (invalidInputs.length == 0) {
+    // check if validate true or false because of sync in js i cannot check directly on the InputInvalid.length because it will be sometimes not set it yet
+    // so i checked on the validate it self if true or false
+    // if it's true dispatch and navigate
+    // if false handlie it in my jsx below using invalid state className
+    if (isValid) {
       Object.entries(value).forEach(([key, value]) => {
         dispatch(updateData({ key, value }));
+        navigate("/basic-information");
       });
     }
   };
@@ -100,7 +108,7 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
         {/* only if there is select input type so this mean only if i was in the basic page */}
         {item.selectData && (
           <>
-            <div className={`container-input `}>
+            <div className="container-input">
               <select
                 className="each-input"
                 id="month"
@@ -119,7 +127,7 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
                 Month
               </label>
             </div>
-            <div className={`container-input gender`}>
+            <div className="container-input gender">
               <select
                 className="each-input"
                 id="gender"
