@@ -8,7 +8,7 @@ interface FormButtonProps {
 const FormButton: React.FC<FormButtonProps> = ({ leftBtn, rightBtn }) => {
   return (
     <div className="button-container">
-      <Link to={"/LoginPage"} className="leftBtn">
+      <Link to="/" className="leftBtn">
         {leftBtn}
       </Link>
       <button className="rightBtn">{rightBtn}</button>

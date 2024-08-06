@@ -5,6 +5,8 @@ import useValidation from "../hook/useValidation";
 import { useDispatch } from "react-redux";
 import { updateData } from "../redux/states/fullDataSlice";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 interface InputProps {
   id: number;
@@ -15,6 +17,7 @@ interface InputProps {
   errorsMsgs?: string;
   min?: number | string;
   max?: number | string;
+  maxlength?: number;
 }
 
 interface SelectProps {
@@ -48,23 +51,15 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
 
   // import useValidation hook to validate the value with the pattern
   const { validate, invalidInputs } = useValidation();
-  // console.log(invalidInputs);
+
+  // toggle password
+  const [isVisible, setIsVisible] = useState(false);
 
   // dispatch to update data
   const dispatch = useDispatch();
 
   // to navigate to the next route when everything is done
   const navigate = useNavigate();
-
-  // it's a bad way to toggle password but i should like that to not modify the EachForm
-  const togglePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const checkbox = e.target;
-
-    const container = checkbox.parentElement?.parentElement;
-    const input = (container?.children[0] as HTMLDivElement)
-      .children[0] as HTMLInputElement;
-    input.type = checkbox.checked ? "text" : "password";
-  };
 
   const handleData = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -89,6 +84,11 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
         navigate(item.next_route);
       });
     }
+
+    // in this case i should send the data to the data base
+    if (e.target.action === "http://localhost:5173/Succesfull") {
+      return;
+    }
   };
 
   return (
@@ -103,10 +103,19 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
             key={input.id}
           >
             <input
+              title={input.errorsMsgs}
               className="each-input"
               required={input.required}
               name={input.name}
-              type={input.type}
+              maxLength={input.maxlength}
+              // i check first if type == password so i'm in the password-information page and i toggle
+              type={
+                input.type === "password"
+                  ? isVisible
+                    ? "text"
+                    : "password"
+                  : input.type || ""
+              }
               min={input.min}
               max={input.max}
               onChange={handleData}
@@ -163,16 +172,21 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
         {/* if i'm in the password page i added like show password checkbox */}
         {item.name === "password" && (
           <>
-            <div className="checkbox-password ">
-              <input
-                type="checkbox"
-                id="checkbox"
-                name="checkbox"
-                value="Bike"
-                onChange={togglePassword}
+            {isVisible ? (
+              <FontAwesomeIcon
+                onClick={() => setIsVisible(!isVisible)}
+                className="show-password-icon from-password-information"
+                icon={faEyeSlash}
+                style={{ color: "#5f6368" }}
               />
-              <label htmlFor="checkbox"> show password</label>
-            </div>
+            ) : (
+              <FontAwesomeIcon
+                onClick={() => setIsVisible(!isVisible)}
+                icon={faEye}
+                style={{ color: "#5f6368" }}
+                className="show-password-icon from-password-information"
+              />
+            )}
           </>
         )}
         <FormButton leftBtn={item.leftBtn} rightBtn={item.rightBtn} />

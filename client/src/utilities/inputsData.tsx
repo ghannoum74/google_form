@@ -12,6 +12,7 @@ export const inputsData = [
         type: "text",
         required: true,
         label: "First Name",
+        maxlength: 20,
         errorsMsgs:
           "Sorry, only letters (a-z), numbers (0-9), and periods (.) are allowed.",
       },
@@ -20,6 +21,7 @@ export const inputsData = [
         name: "lastname",
         type: "text",
         required: true,
+        maxlength: 20,
         label: "Last Name (optional)",
         errorsMsgs:
           "Sorry, only letters (a-z), numbers (0-9), and periods (.) are allowed.",
@@ -42,7 +44,7 @@ export const inputsData = [
         name: "day",
         type: "number",
         required: true,
-        min: "0",
+        min: "1",
         max: "30",
         label: "Day",
         errorsMsgs: "Sorry, Day should be valid (from 0 ---> 30)",
@@ -93,13 +95,14 @@ export const inputsData = [
     caption: "Pick a Gmail address or create your own",
     pattern: "^[a-zA-Z0-9]{2,}[0-9]{0,3}@(gmail|hotmail).com$",
     next_route: "/password-information",
-    leftBtn: "i have already an account",
+    leftBtn: "Use Your Existing Email",
     rightBtn: "Next",
     inputs: [
       {
         id: 1,
-        name: "emailOne",
+        name: "email",
         type: "text",
+        maxlength: 30,
         required: true,
         label: "create your own email",
         errorsMsgs:
@@ -113,12 +116,13 @@ export const inputsData = [
     header: "Create a strong password",
     caption:
       "Create a strong password with a mix of letters, numbers and symbols",
-    next_route: "/",
+    next_route: "/Succesfull",
     inputs: [
       {
         id: 1,
         name: "password",
         type: "password",
+        maxlength: 30,
         required: true,
         label: "Password",
         errorsMsgs:

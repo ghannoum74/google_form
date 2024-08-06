@@ -1,5 +1,5 @@
 * {
-  --blue: rgb(26, 115, 232);
+  --blue: #0b57d0;
   --grey: rgb(95, 99, 104);
   --errorColor: rgb(217, 48, 37);
   box-sizing: border-box;
@@ -42,11 +42,19 @@ img {
 }
 
 /*start design EachForm*/
+.PersonalData,
+.BasicInfo,
+.passwordInfo,
+.emailInfo,
+.loginPage,
+.forgetEmailPage {
+  border: 1px solid #dadce0;
+}
 .form-container {
   height: 100%;
   margin: auto;
   padding: 3rem 3rem 5rem 3rem;
-  border: 1px solid #dadce0;
+  /* border: 1px solid #dadce0; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -195,16 +203,19 @@ img {
 
 /* style show password checkbox */
 .checkbox-password {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  position: relative;
 }
 
-.checkbox-password input {
+.show-password-icon {
+  position: absolute;
+  left: 91%;
+  bottom: 55%;
   cursor: pointer;
 }
 
-.checkbox-password label {
-  padding: 0 0 3px 5px;
+.from-password-information {
+  position: absolute;
+  left: 83%;
+  bottom: 31%;
   cursor: pointer;
 }

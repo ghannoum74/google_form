@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-interface FullDataState {
+export interface FullDataState {
   data: {
     firstname: string;
     lastname: string;
