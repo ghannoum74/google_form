@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import FormButton from "./FormButton";
 import FormHeader from "./FormHeader";
 import useValidation from "../hook/useValidation";
@@ -13,7 +13,6 @@ interface InputProps {
   required: boolean;
   label: string;
   errorsMsgs?: string;
-
   min: number;
   max: number;
 }
@@ -27,9 +26,11 @@ interface SelectProps {
 
 interface ItemProps {
   id: number;
+  name: string;
   header: string;
   caption: string;
   pattern: string;
+  next_route: string;
   inputs: InputProps[];
   selectData?: SelectProps[];
   leftBtn: string;
@@ -55,6 +56,19 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
   // to navigate to the next route when everything is done
   const navigate = useNavigate();
 
+  // it's a bad way to toggle password but i should like that to not modify the EachForm
+  const togglePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const childElement = e.target;
+
+    const container = childElement.parentElement.parentElement;
+    const input = container.children[0].children[0];
+    if (childElement.checked) {
+      input.type = "text";
+    } else {
+      input.type = "password";
+    }
+  };
+
   const handleData = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -75,7 +89,7 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
     if (isValid) {
       Object.entries(value).forEach(([key, value]) => {
         dispatch(updateData({ key, value }));
-        navigate("/basic-information");
+        navigate(item.next_route);
       });
     }
   };
@@ -145,6 +159,20 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
               <label className="each-label" htmlFor="gender">
                 Gender
               </label>
+            </div>
+          </>
+        )}
+        {item.name === "password" && (
+          <>
+            <div className="checkbox-password ">
+              <input
+                type="checkbox"
+                id="checkbox"
+                name="checkbox"
+                value="Bike"
+                onClick={togglePassword}
+              />
+              <label htmlFor="checkbox"> show password</label>
             </div>
           </>
         )}

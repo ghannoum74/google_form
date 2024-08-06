@@ -83,7 +83,51 @@ export const inputsData = [
         genderData: ["Male", "Female", "Rather not say", "Custom"],
       },
     ],
+    leftBtn: "i have already an account",
+    rightBtn: "Next",
+  },
+  {
+    id: 3,
+    name: "emailData",
+    header: "Choose your Gmail address",
+    caption: "Pick a Gmail address or create your own",
+    pattern: "^[a-zA-Z0-9]{2,}[0-9]{0,3}@(gmail|hotmail).com$",
+    next_route: "/password-information",
+    leftBtn: "i have already an account",
+    rightBtn: "Next",
+    inputs: [
+      {
+        id: 1,
+        name: "emailOne",
+        type: "text",
+        required: true,
+        label: "create your own email",
+        errorsMsgs:
+          "Sorry, email should be as format 'Example1@gmail|hotmail.com' ",
+      },
+    ],
+  },
+  {
+    id: 4,
+    name: "password",
+    header: "Create a strong password",
+    caption:
+      "Create a strong password with a mix of letters, numbers and symbols",
+    next_route: "/",
+    inputs: [
+      {
+        id: 1,
+        name: "password",
+        type: "password",
+        required: true,
+        label: "Password",
+        errorsMsgs:
+          "strong password should contain Minimum 8 characters. At least one uppercase letter. At least one lowercase letter. At least one number. At least one special character (e.g., !@#$%^&*).",
+      },
+    ],
 
+    pattern:
+      "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,}$",
     leftBtn: "i have already an account",
     rightBtn: "Next",
   },
