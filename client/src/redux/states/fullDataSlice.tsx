@@ -1,6 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+interface FullDataState {
+  data: {
+    firstname: string;
+    lastname: string;
+    day: number | null;
+    year: number | null;
+    month: number | null;
+    gender: string;
+    email: string;
+    password: string;
+  };
+}
+
+const initialState: FullDataState = {
   data: {
     firstname: "",
     lastname: "",

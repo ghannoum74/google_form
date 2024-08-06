@@ -192,3 +192,19 @@ img {
 .BasicInfo .auth-form .container-input.gender {
   flex: 1;
 }
+
+/* style show password checkbox */
+.checkbox-password {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.checkbox-password input {
+  cursor: pointer;
+}
+
+.checkbox-password label {
+  padding: 0 0 3px 5px;
+  cursor: pointer;
+}
