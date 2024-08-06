@@ -13,8 +13,8 @@ interface InputProps {
   required: boolean;
   label: string;
   errorsMsgs?: string;
-  min: number;
-  max: number;
+  min?: number | string;
+  max?: number | string;
 }
 
 interface SelectProps {
@@ -58,15 +58,12 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
 
   // it's a bad way to toggle password but i should like that to not modify the EachForm
   const togglePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const childElement = e.target;
+    const checkbox = e.target;
 
-    const container = childElement.parentElement.parentElement;
-    const input = container.children[0].children[0];
-    if (childElement.checked) {
-      input.type = "text";
-    } else {
-      input.type = "password";
-    }
+    const container = checkbox.parentElement?.parentElement;
+    const input = (container?.children[0] as HTMLDivElement)
+      .children[0] as HTMLInputElement;
+    input.type = checkbox.checked ? "text" : "password";
   };
 
   const handleData = (
@@ -162,6 +159,8 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
             </div>
           </>
         )}
+
+        {/* if i'm in the password page i added like show password checkbox */}
         {item.name === "password" && (
           <>
             <div className="checkbox-password ">
@@ -170,7 +169,7 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
                 id="checkbox"
                 name="checkbox"
                 value="Bike"
-                onClick={togglePassword}
+                onChange={togglePassword}
               />
               <label htmlFor="checkbox"> show password</label>
             </div>
