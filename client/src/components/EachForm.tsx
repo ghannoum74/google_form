@@ -7,12 +7,21 @@ import { updateData } from "../redux/states/fullDataSlice";
 
 interface InputProps {
   id: number;
-
   name: string;
   type: string;
   required: boolean;
   label: string;
   errorsMsgs?: string;
+  pattern: string;
+  min: number;
+  max: number;
+}
+
+interface SelectProps {
+  id: number;
+  label: string;
+  monthsData?: string[];
+  genderData?: string[];
 }
 
 interface ItemProps {
@@ -20,7 +29,7 @@ interface ItemProps {
   header: string;
   caption: string;
   inputs: InputProps[];
-  pattern: string;
+  selectData?: SelectProps[];
   leftBtn: string;
   rightBtn: string;
 }
@@ -40,7 +49,9 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
   // dispatch to update data
   const dispatch = useDispatch();
 
-  const handleData = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleData = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setValue((prev) => ({ ...prev, [name]: value }));
   };
@@ -49,7 +60,9 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
     e.preventDefault();
 
     // first validate the inputs value object
-    validate(value, item.pattern);
+    item.inputs.map((input) => {
+      validate(value, input.pattern);
+    });
 
     // check after validate in invalidInputs contain any invalid input
     if (invalidInputs.length == 0) {
@@ -72,16 +85,61 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
           >
             <input
               className="each-input"
-              key={input.id}
               required={input.required}
               name={input.name}
               type={input.type}
+              min={input.min}
+              max={input.max}
               onChange={handleData}
             />
             <label className="each-label">{input.label}</label>
             <div className="each-errorMsg">{input.errorsMsgs}</div>
           </div>
         ))}
+
+        {/* only if there is select input type so this mean only if i was in the basic page */}
+        {item.selectData && (
+          <>
+            <div className={`container-input `}>
+              <select
+                className="each-input"
+                id="month"
+                name="month"
+                required
+                onChange={handleData}
+              >
+                <option defaultValue="" disabled hidden selected></option>
+                {item.selectData[0].monthsData?.map((month, index) => (
+                  <option key={index} value={month}>
+                    {month}
+                  </option>
+                ))}
+              </select>
+              <label className="each-label" htmlFor="month">
+                Month
+              </label>
+            </div>
+            <div className={`container-input gender`}>
+              <select
+                className="each-input"
+                id="gender"
+                name="gender"
+                required
+                onChange={handleData}
+              >
+                <option defaultValue="" disabled hidden selected></option>
+                {item.selectData[1].genderData?.map((gender, index) => (
+                  <option key={index} value={gender}>
+                    {gender}
+                  </option>
+                ))}
+              </select>
+              <label className="each-label" htmlFor="gender">
+                Gender
+              </label>
+            </div>
+          </>
+        )}
         <FormButton leftBtn={item.leftBtn} rightBtn={item.rightBtn} />
       </form>
     </div>

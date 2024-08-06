@@ -1,52 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  firstname: "",
-  lastname: "",
-  day: null,
-  year: null,
-  month: null,
-  gender: "",
-  email: "",
-  password: "",
+  data: {
+    firstname: "",
+    lastname: "",
+    day: null,
+    year: null,
+    month: null,
+    gender: "",
+    email: "",
+    password: "",
+  },
 };
 
 const fullDataSlice = createSlice({
   name: "fullData",
   initialState,
   reducers: {
-    setFullName(state, action) {
-      state.firstname = action.payload.firstname;
-    },
-    setlastName(state, action) {
-      state.lastname = action.payload.lastname;
-    },
-    setDay(state, action) {
-      state.day = action.payload.day;
-    },
-    setYear(state, action) {
-      state.year = action.payload.year;
-    },
-    setMonth(state, action) {
-      state.month = action.payload.month;
-    },
-    setEmail(state, action) {
-      state.email = action.payload.email;
-    },
-    setPasswors(state, action) {
-      state.password = action.payload.password;
+    updateData(state, action) {
+      // retrieve key and value from payload
+      const { key, value } = action.payload;
+      // eslint-disable-next-line no-prototype-builtins
+      state.data[key] = value;
     },
   },
 });
 
-export const {
-  setFullName,
-  setlastName,
-  setDay,
-  setYear,
-  setMonth,
-  setEmail,
-  setPasswors,
-} = fullDataSlice.actions;
+export const { updateData } = fullDataSlice.actions;
 
 export default fullDataSlice.reducer;
