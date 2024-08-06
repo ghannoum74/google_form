@@ -3,6 +3,7 @@ import { useState } from "react";
 const useValidation = () => {
   const [invalidInputs, setInvalidInputs] = useState<string[]>([]);
   const validate = (value: { [key: string]: string }, pattern: string) => {
+    console.log(value, pattern);
     const invalidSet = new Set<string>();
     // pattern in a string so we should convert it to regex object
     const regex = new RegExp(pattern);
