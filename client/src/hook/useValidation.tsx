@@ -3,7 +3,6 @@ import { useState } from "react";
 const useValidation = () => {
   const [invalidInputs, setInvalidInputs] = useState<string[]>([]);
   const validate = (value: { [key: string]: string }, pattern: string) => {
-    console.log(value, pattern);
     const invalidSet = new Set<string>();
     // pattern in a string so we should convert it to regex object
     const regex = new RegExp(pattern);
@@ -15,7 +14,13 @@ const useValidation = () => {
         invalidSet.add(key);
       }
     });
-    setInvalidInputs(Array.from(invalidSet));
+    // in this case validate fct return true or false if the is invalid or not
+    // so when i called in my EachForm cmpnt the result is based on this return not on the invalidInputs
+    // after checking if validate is false it takes the data from invalidInputs
+    const invalidArray = Array.from(invalidSet);
+    setInvalidInputs(invalidArray);
+
+    return invalidArray.length === 0;
   };
   return { validate, invalidInputs };
 };
