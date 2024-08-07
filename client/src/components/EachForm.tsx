@@ -1,12 +1,15 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useState } from "react";
 import FormButton from "./FormButton";
 import FormHeader from "./FormHeader";
 import useValidation from "../hook/useValidation";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateData } from "../redux/states/fullDataSlice";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 interface InputProps {
   id: number;
@@ -55,16 +58,25 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
   // toggle password
   const [isVisible, setIsVisible] = useState(false);
 
+  // toggle email input
+  const [isChecked, setIsCheck] = useState(false);
+
   // dispatch to update data
   const dispatch = useDispatch();
 
+  const data = useSelector((state) => state.fullData.data);
   // to navigate to the next route when everything is done
   const navigate = useNavigate();
 
   const handleData = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    // so check if the data comes from the spetial input PhonInput so it dosent has any target the e is the value for it so added directly
+    if (e.target === undefined) {
+      return setValue((prev) => ({ ...prev, ["phoneNumber"]: e }));
+    }
     const { name, value } = e.target;
+
     setValue((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -91,39 +103,153 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
     }
   };
 
+  const generateEmail = () => {
+    const options = [];
+    options.push(data.firstname + data.lastname.slice(0, 2) + data.year);
+    options.push(
+      data.firstname.slice(0, 2) +
+        data.lastname.slice(0, 2) +
+        data.gender.slice(0, 2) +
+        data.month
+    );
+    options.push(data.lastname + data.firstname.slice(0, 2) + +data.day);
+    return options;
+  };
+
+  // useEffect(() => {
+  //   console.log("data", data);
+  // }, [data]);
+
   return (
     <div className="form-container" key={item.id}>
       <FormHeader header={item.header} caption={item.caption} />
       <form className="auth-form" onSubmit={handleForm}>
-        {item.inputs.map((input) => (
-          <div
-            className={`container-input ${
-              invalidInputs.includes(input.name) ? "invalid" : ""
-            }`}
-            key={input.id}
-          >
-            <input
-              title={input.errorsMsgs}
-              className="each-input"
-              required={input.required}
-              name={input.name}
-              maxLength={input.maxlength}
-              // i check first if type == password so i'm in the password-information page and i toggle
-              type={
-                input.type === "password"
-                  ? isVisible
-                    ? "text"
-                    : "password"
-                  : input.type || ""
-              }
-              min={input.min}
-              max={input.max}
-              onChange={handleData}
-            />
-            <label className="each-label">{input.label}</label>
-            <div className="each-errorMsg">{input.errorsMsgs}</div>
+        {/* check if the page is the Email page  */}
+        {item.id === 3 ? (
+          <div className="radio">
+            <div className="container-input container-radio">
+              <input
+                type="radio"
+                name="options"
+                onChange={() => setIsCheck(false)}
+                id="opt_1"
+                className="radio-input"
+                value={
+                  (data.firstname + data.lastname.slice(0, 2) + data.year)
+                    .replace(/ /g, "_")
+                    .toLowerCase() + "@gmail.com"
+                }
+              />
+              <label htmlFor="opt_1" className="radio-label">
+                {(data.firstname + data.lastname.slice(0, 2) + data.year)
+                  .replace(/ /g, "_")
+                  .toLowerCase() + "@gmail.com"}
+              </label>
+            </div>
+            <div className="container-input container-radio">
+              <input
+                type="radio"
+                name="options"
+                id="opt_2"
+                className="radio-input"
+                onChange={() => setIsCheck(false)}
+                value={
+                  (
+                    data.lastname +
+                    data.firstname.slice(0, 2) +
+                    +data.day
+                  ).toLowerCase() + "@gmail.com"
+                }
+              />
+              <label htmlFor="opt_2" className="radio-label">
+                {(
+                  data.lastname +
+                  data.firstname.slice(0, 2) +
+                  +data.day
+                ).toLowerCase() + "@gmail.com"}
+              </label>
+            </div>
+            <div className="container-input container-radio toggle-email">
+              <input
+                type="radio"
+                name="options"
+                className="radio-input toggle-radio"
+                onChange={() => setIsCheck(true)}
+                id="opt_3"
+              />
+              <label htmlFor="opt_3" className="radio-label">
+                Create your own Gmail address
+              </label>
+            </div>
+            {isChecked && (
+              <div
+                className={`container-input ${
+                  invalidInputs.includes(item.inputs[0].name) ? "invalid" : ""
+                }`}
+              >
+                <input
+                  title={item.inputs[0].errorsMsgs}
+                  className="each-input"
+                  required={item.inputs[0].required}
+                  name={item.inputs[0].name}
+                  maxLength={item.inputs[0].maxlength}
+                  type={item.inputs[0].type}
+                  onChange={handleData}
+                />
+                <label className="each-label">{item.inputs[0].label}</label>
+                <div className="each-errorMsg">{item.inputs[0].errorsMsgs}</div>
+              </div>
+            )}
           </div>
-        ))}
+        ) : //  check if the page is the phone number page
+        item.id === 4 ? (
+          <div className={`container-input`}>
+            <PhoneInput
+              country={"lb"}
+              name="phoneNumber"
+              // @ts-expect-error
+              onChange={handleData}
+              inputProps={{
+                name: "phone",
+                required: true,
+                autoFocus: true,
+              }}
+              className="custom-phone-input"
+            />
+          </div>
+        ) : (
+          item.inputs.map((input) => (
+            // invalid class for the message error appear
+
+            <div
+              className={`container-input ${
+                invalidInputs.includes(input.name) ? "invalid" : ""
+              }`}
+              key={input.id}
+            >
+              <input
+                title={input.errorsMsgs}
+                className="each-input"
+                required={input.required}
+                name={input.name}
+                maxLength={input.maxlength}
+                // i check first if type == password so i'm in the password-information page and i toggle
+                type={
+                  input.type === "password"
+                    ? isVisible
+                      ? "text"
+                      : "password"
+                    : input.type || ""
+                }
+                min={input.min}
+                max={input.max}
+                onChange={handleData}
+              />
+              <label className="each-label">{input.label}</label>
+              <div className="each-errorMsg">{input.errorsMsgs}</div>
+            </div>
+          ))
+        )}
 
         {/* only if there is select input type so this mean only if i was in the basic page */}
         {item.selectData && (
