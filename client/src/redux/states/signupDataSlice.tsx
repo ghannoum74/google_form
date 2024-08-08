@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface FullDataState {
@@ -9,6 +10,7 @@ export interface FullDataState {
     month: number | null;
     gender: string;
     email: string;
+    phoneNumber: number | null;
     password: string;
   };
 }
@@ -22,23 +24,24 @@ const initialState: FullDataState = {
     month: null,
     gender: "",
     email: "",
+    phoneNumber: null,
     password: "",
   },
 };
 
-const fullDataSlice = createSlice({
+const signupDataSlice = createSlice({
   name: "fullData",
   initialState,
   reducers: {
     updateData(state, action) {
       // retrieve key and value from payload
       const { key, value } = action.payload;
-      // eslint-disable-next-line no-prototype-builtins
+      // @ts-expect-error
       state.data[key] = value;
     },
   },
 });
 
-export const { updateData } = fullDataSlice.actions;
+export const { updateData } = signupDataSlice.actions;
 
-export default fullDataSlice.reducer;
+export default signupDataSlice.reducer;

@@ -3,15 +3,15 @@ import EachFormSignup from "../../components/EachFormSignup";
 import AnimatedPages from "../../utilities/AnimatedPages";
 import { signupInputsData } from "../../utilities/signupInputsData";
 
-const BasicDataPage = () => {
+const PhoneNumberPage = () => {
   return (
-    <div className="BasicInfo">
+    <div className="phoneNumberInfo">
       <AnimatedPages>
         {/* @ts-expect-error */}
-        <EachFormSignup item={signupInputsData[1]} />
+        <EachFormSignup item={signupInputsData[3]} />
       </AnimatedPages>
     </div>
   );
 };
 
-export default BasicDataPage;
+export default PhoneNumberPage;

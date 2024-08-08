@@ -1,27 +1,31 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface LoginData {
-  email: string;
-  password: string;
+  data: {
+    email: string;
+    password: string;
+  };
 }
 const initialState: LoginData = {
-  email: "",
-  password: "",
+  data: {
+    email: "",
+    password: "",
+  },
 };
 
 const loginDataSlice = createSlice({
   name: "loginData",
   initialState,
   reducers: {
-    setEmail(state, action) {
-      state.email = action.payload;
-    },
-    setPassword(state, action) {
-      state.password = action.payload;
+    updateData(state, action) {
+      const { key, value } = action.payload;
+      // @ts-expect-error
+      state.data[key] = value;
     },
   },
 });
 
-export const { setEmail, setPassword } = loginDataSlice.actions;
+export const { updateData } = loginDataSlice.actions;
 
 export default loginDataSlice.reducer;

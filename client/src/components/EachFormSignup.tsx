@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormButton from "./FormButton";
 import FormHeader from "./FormHeader";
 import useValidation from "../hook/useValidation";
 import { useDispatch, useSelector } from "react-redux";
-import { updateData } from "../redux/states/fullDataSlice";
+import { updateData } from "../redux/states/signupDataSlice";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import axios from "axios";
 
 interface InputProps {
   id: number;
@@ -43,11 +43,11 @@ interface ItemProps {
   rightBtn: string;
 }
 
-interface EachFormProps {
+interface EachFormSignupProps {
   item: ItemProps;
 }
 
-const EachForm: React.FC<EachFormProps> = ({ item }) => {
+const EachFormSignup: React.FC<EachFormSignupProps> = ({ item }) => {
   // this state like general state so each component put in it key input and value different to the next component so you cannot initialize it
   // and after each succesfull entered data and goes to the next route it dispatch the useState's data and store it to redux store
   const [value, setValue] = useState({});
@@ -63,7 +63,7 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
 
   // dispatch to update data
   const dispatch = useDispatch();
-
+  // @ts-expect-error
   const data = useSelector((state) => state.fullData.data);
   // to navigate to the next route when everything is done
   const navigate = useNavigate();
@@ -71,10 +71,6 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
   const handleData = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    // so check if the data comes from the spetial input PhonInput so it dosent has any target the e is the value for it so added directly
-    if (e.target === undefined) {
-      return setValue((prev) => ({ ...prev, ["phoneNumber"]: e }));
-    }
     const { name, value } = e.target;
 
     setValue((prev) => ({ ...prev, [name]: value }));
@@ -82,7 +78,6 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
 
   const handleForm = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     // first validate the inputs value object
     const isValid = validate(value, item.pattern);
 
@@ -98,26 +93,16 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
     }
 
     // in this case i should send the data to the data base
-    if (e.target.action === "http://localhost:5173/Succesfull") {
-      return;
-    }
-  };
-
-  const generateEmail = () => {
-    const options = [];
-    options.push(data.firstname + data.lastname.slice(0, 2) + data.year);
-    options.push(
-      data.firstname.slice(0, 2) +
-        data.lastname.slice(0, 2) +
-        data.gender.slice(0, 2) +
-        data.month
-    );
-    options.push(data.lastname + data.firstname.slice(0, 2) + +data.day);
-    return options;
+    // if (item.name === "password") {
+    //   axios
+    //     .post("http://localhost:5000/auth/signin", value)
+    //     .then((res) => console.log(res))
+    //     .catch((error) => console.log(error));
+    // }
   };
 
   // useEffect(() => {
-  //   console.log("data", data);
+  //   console.log(data);
   // }, [data]);
 
   return (
@@ -130,29 +115,31 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
             <div className="container-input container-radio">
               <input
                 type="radio"
-                name="options"
-                onChange={() => setIsCheck(false)}
+                name="email"
+                onClick={() => setIsCheck(false)}
+                onChange={handleData}
                 id="opt_1"
                 className="radio-input"
                 value={
                   (data.firstname + data.lastname.slice(0, 2) + data.year)
-                    .replace(/ /g, "_")
+                    .replace(/ /g, "")
                     .toLowerCase() + "@gmail.com"
                 }
               />
               <label htmlFor="opt_1" className="radio-label">
                 {(data.firstname + data.lastname.slice(0, 2) + data.year)
-                  .replace(/ /g, "_")
+                  .replace(/ /g, "")
                   .toLowerCase() + "@gmail.com"}
               </label>
             </div>
             <div className="container-input container-radio">
               <input
                 type="radio"
-                name="options"
+                name="email"
                 id="opt_2"
                 className="radio-input"
-                onChange={() => setIsCheck(false)}
+                onClick={() => setIsCheck(false)}
+                onChange={handleData}
                 value={
                   (
                     data.lastname +
@@ -172,9 +159,9 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
             <div className="container-input container-radio toggle-email">
               <input
                 type="radio"
-                name="options"
+                name="email"
                 className="radio-input toggle-radio"
-                onChange={() => setIsCheck(true)}
+                onClick={() => setIsCheck(true)}
                 id="opt_3"
               />
               <label htmlFor="opt_3" className="radio-label">
@@ -200,22 +187,6 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
                 <div className="each-errorMsg">{item.inputs[0].errorsMsgs}</div>
               </div>
             )}
-          </div>
-        ) : //  check if the page is the phone number page
-        item.id === 4 ? (
-          <div className={`container-input`}>
-            <PhoneInput
-              country={"lb"}
-              name="phoneNumber"
-              // @ts-expect-error
-              onChange={handleData}
-              inputProps={{
-                name: "phone",
-                required: true,
-                autoFocus: true,
-              }}
-              className="custom-phone-input"
-            />
           </div>
         ) : (
           item.inputs.map((input) => (
@@ -315,10 +286,14 @@ const EachForm: React.FC<EachFormProps> = ({ item }) => {
             )}
           </>
         )}
-        <FormButton leftBtn={item.leftBtn} rightBtn={item.rightBtn} />
+        <FormButton
+          leftBtn={item.leftBtn}
+          rightBtn={item.rightBtn}
+          from="signin"
+        />
       </form>
     </div>
   );
 };
 
-export default EachForm;
+export default EachFormSignup;
