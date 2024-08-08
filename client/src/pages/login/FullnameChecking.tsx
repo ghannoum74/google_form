@@ -3,15 +3,15 @@ import EachFormLogin from "../../components/EachFormLogin";
 import AnimatedPages from "../../utilities/AnimatedPages";
 import { loginInputsData } from "../../utilities/loginInputsData";
 
-const LoginPage = () => {
+const FullnameChecking = () => {
   return (
     <div className="loginPage">
       <AnimatedPages>
         {/* @ts-expect-error */}
-        <EachFormLogin item={loginInputsData[0]} />
+        <EachFormLogin item={loginInputsData[3]} />
       </AnimatedPages>
     </div>
   );
 };
 
-export default LoginPage;
+export default FullnameChecking;

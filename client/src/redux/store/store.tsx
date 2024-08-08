@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import fullDataSlice from "../states/fullDataSlice";
 import loginDataSlice from "../states/loginDataSlics";
+import signupDataSlice from "../states/signupDataSlice";
 export default configureStore({
   reducer: {
-    fullData: fullDataSlice,
+    fullData: signupDataSlice,
     loginData: loginDataSlice,
   },
 });

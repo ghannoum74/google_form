@@ -1,12 +1,14 @@
-import EachForm from "../../components/EachForm";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import EachFormSignup from "../../components/EachFormSignup";
 import AnimatedPages from "../../utilities/AnimatedPages";
-import { inputsData } from "../../utilities/inputsData";
+import { signupInputsData } from "../../utilities/signupInputsData";
 
 const PasswordDataPage = () => {
   return (
     <div className="passwordInfo" style={{ position: "relative" }}>
       <AnimatedPages>
-        <EachForm item={inputsData[3]} />
+        {/* @ts-expect-error */}
+        <EachFormSignup item={signupInputsData[4]} />
       </AnimatedPages>
     </div>
   );

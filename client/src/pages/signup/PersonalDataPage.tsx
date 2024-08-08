@@ -1,12 +1,14 @@
-import EachForm from "../../components/EachForm";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import EachFormSignup from "../../components/EachFormSignup";
 import AnimatedPages from "../../utilities/AnimatedPages";
-import { inputsData } from "../../utilities/inputsData";
+import { signupInputsData } from "../../utilities/signupInputsData";
 
 const PersonalDataPage = () => {
   return (
     <div className="PersonalData">
       <AnimatedPages>
-        <EachForm item={inputsData[0]} />
+        {/* @ts-expect-error */}
+        <EachFormSignup item={signupInputsData[0]} />
       </AnimatedPages>
     </div>
   );
