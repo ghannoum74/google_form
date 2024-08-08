@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormButton from "./FormButton";
 import FormHeader from "./FormHeader";
 import useValidation from "../hook/useValidation";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateData } from "../redux/states/loginDataSlics";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import "react-phone-input-2/lib/style.css";
+import axios from "axios";
 
 interface InputProps {
   id: number;
@@ -54,6 +55,8 @@ const EachFormLogin: React.FC<EachFormLoginProps> = ({ item }) => {
   // dispatch to update data
   const dispatch = useDispatch();
 
+  const data = useSelector((state) => state.loginData.data);
+
   // to navigate to the next route when everything is done
   const navigate = useNavigate();
 
@@ -81,13 +84,21 @@ const EachFormLogin: React.FC<EachFormLoginProps> = ({ item }) => {
         navigate(item.next_route);
       });
     }
-
-    // in this case i should send the data to the data base
   };
 
-  //   useEffect(() => {
-  //     console.log(data);
-  //   }, [data]);
+  // i used useEffect to post because if i used it in the onSubmit the data not contain the password yet
+  useEffect(() => {
+    if (item.name === "password") {
+      if (data.password) {
+        axios
+          .post("http://localhost:5000/auth/login", data)
+          .then((response) => console.log(response))
+          .catch((err) => navigate("/error-page"));
+      } else {
+        navigate("/error-page");
+      }
+    }
+  }, [data, item.name]);
 
   return (
     <div className="form-container" key={item.id}>
