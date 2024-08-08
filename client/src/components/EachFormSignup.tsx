@@ -10,6 +10,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import "react-phone-input-2/lib/style.css";
 import axios from "axios";
+import ErrorPage from "../pages/ErrorPage";
+import useExisting from "../hook/useExisting";
 
 interface InputProps {
   id: number;
@@ -55,11 +57,16 @@ const EachFormSignup: React.FC<EachFormSignupProps> = ({ item }) => {
   // import useValidation hook to validate the value with the pattern
   const { validate, invalidInputs } = useValidation();
 
+  const { exists, checkExistence } = useExisting();
+
   // toggle password
   const [isVisible, setIsVisible] = useState(false);
 
   // toggle email input
   const [isChecked, setIsCheck] = useState(false);
+
+  // toggle error
+  const [errorPage, setErrorPage] = useState(false);
 
   // dispatch to update data
   const dispatch = useDispatch();
@@ -76,34 +83,46 @@ const EachFormSignup: React.FC<EachFormSignupProps> = ({ item }) => {
     setValue((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleForm = (e: React.ChangeEvent<HTMLFormElement>) => {
+  const handleForm = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     // first validate the inputs value object
     const isValid = validate(value, item.pattern);
+    // check if email in used  in email page when clicking on button
+    if (item.name === "email" || item.name === "phone") {
+      const exist = await checkExistence(item.name, value);
 
-    // check if validate true or false because of sync in js i cannot check directly on the InputInvalid.length because it will be sometimes not set it yet
-    // so i checked on the validate it self if true or false
-    // if it's true dispatch and navigate
-    // if false handlie it in my jsx below using invalid state className
-    if (isValid) {
+      // check if validate true or false because of sync in js i cannot check directly on the InputInvalid.length because it will be sometimes not set it yet
+      // so i checked on the validate it self if true or false
+      // if it's true dispatch and navigate
+      // if false handlie it in my jsx below using invalid state className
+
+      // check if email or password exist
+      // if exist error on the button of the page will show up
+      if (isValid && !exist) {
+        Object.entries(value).forEach(([key, value]) => {
+          dispatch(updateData({ key, value }));
+          navigate(item.next_route);
+        });
+      }
+    } else {
       Object.entries(value).forEach(([key, value]) => {
         dispatch(updateData({ key, value }));
         navigate(item.next_route);
       });
     }
-
-    // in this case i should send the data to the data base
-    // if (item.name === "password") {
-    //   axios
-    //     .post("http://localhost:5000/auth/signin", value)
-    //     .then((res) => console.log(res))
-    //     .catch((error) => console.log(error));
-    // }
   };
 
-  // useEffect(() => {
-  //   console.log(data);
-  // }, [data]);
+  // i used useEffect to post because if i used it in the onSubmit the data not contain the password yet
+  useEffect(() => {
+    if (item.name === "password") {
+      if (data.password) {
+        axios
+          .post("http://localhost:5000/auth/signup", data)
+          .then((response) => console.log(response))
+          .catch((err) => navigate("/error-page"));
+      }
+    }
+  }, [data, item.name]);
 
   return (
     <div className="form-container" key={item.id}>
@@ -185,6 +204,13 @@ const EachFormSignup: React.FC<EachFormSignupProps> = ({ item }) => {
                 />
                 <label className="each-label">{item.inputs[0].label}</label>
                 <div className="each-errorMsg">{item.inputs[0].errorsMsgs}</div>
+                {/* if email exist this message will show up */}
+                <div
+                  className="each-errorMsg"
+                  style={{ display: exists ? "block" : "none" }}
+                >
+                  This {item.name} already Taken! Try another.
+                </div>
               </div>
             )}
           </div>
@@ -218,6 +244,13 @@ const EachFormSignup: React.FC<EachFormSignupProps> = ({ item }) => {
               />
               <label className="each-label">{input.label}</label>
               <div className="each-errorMsg">{input.errorsMsgs}</div>
+              {/* if phone number exist this message will show up */}
+              <div
+                className="each-errorMsg"
+                style={{ display: exists ? "block" : "none" }}
+              >
+                This {item.name} already in use! Try another.
+              </div>
             </div>
           ))
         )}
@@ -292,6 +325,7 @@ const EachFormSignup: React.FC<EachFormSignupProps> = ({ item }) => {
           from="signin"
         />
       </form>
+      {errorPage && <ErrorPage />}
     </div>
   );
 };
