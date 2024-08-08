@@ -3,7 +3,7 @@ const joi = require("joi");
 const bcrypt = require("bcrypt");
 const Schema = mongoose.Schema;
 
-const signupSchema = new Schema({
+const userSchema = new Schema({
   firstname: {
     type: String,
     required: true,
@@ -60,6 +60,13 @@ const signupSchema = new Schema({
     maxlength: 30,
     match: /^[a-zA-Z0-9]{2,}[0-9]{0,3}@(gmail|hotmail).com$/,
   },
+  phoneNumber: {
+    type: String,
+    unique: true,
+    required: true,
+    maxlength: 8,
+    match: /^(81|76|77|03|71|70)[0-9]{6}$/,
+  },
   password: {
     type: String,
     required: true,
@@ -67,7 +74,7 @@ const signupSchema = new Schema({
 });
 
 //***************************static signup method****************************//
-signupSchema.statics.signup = async function (
+userSchema.statics.signup = async function (
   firstname,
   lastname,
   day,
@@ -75,6 +82,7 @@ signupSchema.statics.signup = async function (
   year,
   gender,
   email,
+  phoneNumber,
   password
 ) {
   if (
@@ -85,6 +93,7 @@ signupSchema.statics.signup = async function (
     !year ||
     !gender ||
     !email ||
+    !phoneNumber ||
     !password
   ) {
     throw Error("all fields must be fieled!");
@@ -93,6 +102,11 @@ signupSchema.statics.signup = async function (
   if (existEmail) {
     throw Error("Email already in use!");
   }
+
+  // const existphoneNumber = await this.findOne({ phoneNumber });
+  // if (existphoneNumber) {
+  //   throw Error("Phone number already in use!");
+  // }
 
   try {
     const salt = await bcrypt.genSalt(10);
@@ -108,6 +122,7 @@ signupSchema.statics.signup = async function (
       month,
       gender,
       email,
+      phoneNumber,
       password: hashedPassword,
     });
 
@@ -118,7 +133,7 @@ signupSchema.statics.signup = async function (
 };
 
 //***************************static login method****************************//
-signupSchema.statics.login = async function (email, password) {
+userSchema.statics.login = async function (email, password) {
   if (!email || !password) {
     throw Error("all fields must be filied!");
   }
@@ -137,7 +152,7 @@ signupSchema.statics.login = async function (email, password) {
   return user;
 };
 
-const User = mongoose.model("User", signupSchema);
+const User = mongoose.model("User", userSchema);
 
 const validationSignup = joi.object({
   firstname: joi
@@ -178,6 +193,10 @@ const validationSignup = joi.object({
     .pattern(new RegExp("^[a-zA-Z0-9]{2,}[0-9]{0,3}@(gmail|hotmail).com$"))
     .max(30)
     .required(),
+  phoneNumber: joi
+    .string()
+    .max(8)
+    .pattern(new RegExp("^(81|76|77|03|71|70)[0-9]{6}$")),
   password: joi.string().required(),
 });
 
