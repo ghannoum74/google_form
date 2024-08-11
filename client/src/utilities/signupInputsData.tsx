@@ -90,13 +90,11 @@ export const signupInputsData = [
   },
   {
     id: 3,
-    name: "emailData",
+    name: "email",
     header: "Choose your Gmail address",
     caption: "create your own",
     pattern: "^[a-zA-Z0-9]{2,}[0-9]{0,3}@(gmail|hotmail).com$",
     next_route: "/phone-information",
-    leftBtn: "Use Your Existing Email",
-    rightBtn: "Next",
     inputs: [
       {
         id: 1,
@@ -109,15 +107,15 @@ export const signupInputsData = [
           "Sorry, email should be as format 'Example1@gmail|hotmail.com' ",
       },
     ],
+    leftBtn: "Use Your Existing Email",
+    rightBtn: "Next",
   },
   {
     id: 4,
-    name: "phoneData",
+    name: "phone",
     header: "Enter your Phone Number",
     caption: "Only lebanese Here!",
     next_route: "/password-information",
-    leftBtn: "Use Your Existing Email",
-    rightBtn: "Next",
     inputs: [
       {
         id: 1,
@@ -130,6 +128,8 @@ export const signupInputsData = [
           "phone number should contain 8 digits start by (81|71|76|03|70) without any space or special charactere",
       },
     ],
+    leftBtn: "Use Your Existing Email",
+    rightBtn: "Next",
     pattern: "^(81|76|77|03|71|70)[0-9]{6}$",
   },
   {
@@ -138,7 +138,7 @@ export const signupInputsData = [
     header: "Create a strong password",
     caption:
       "Create a strong password with a mix of letters, numbers and symbols",
-    next_route: "/Succesfull",
+    next_route: "/succesfull",
     inputs: [
       {
         id: 1,

@@ -1,7 +1,7 @@
 export const loginInputsData = [
   {
     id: 1,
-    name: "emailData",
+    name: "email",
     header: "Sign in",
     caption: "Use your Google Account",
     pattern: "^[a-zA-Z0-9]{2,}[0-9]{0,3}@(gmail|hotmail).com$",
@@ -19,7 +19,7 @@ export const loginInputsData = [
         required: true,
         label: "Enter your own email",
         errorsMsgs:
-          "Sorry, email should be as format 'Example1@gmail|hotmail.com' ",
+          "couldn't find your Google Account, Try using your email address instead",
       },
     ],
   },
@@ -39,8 +39,7 @@ export const loginInputsData = [
         maxlength: 30,
         required: true,
         label: "Password",
-        errorsMsgs:
-          "strong password should contain Minimum 8 characters. At least one uppercase letter. At least one lowercase letter. At least one number. At least one special character (e.g., !@#$%^&*).",
+        errorsMsgs: "password dosen 't match! Get out bitch!!!",
       },
     ],
 
