@@ -1,4 +1,4 @@
-const { validationLogin, User } = require("../models/signupModel");
+const { validationLogin, User } = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const createToken = (_id) => {
   return jwt.sign({ _id }, process.env.JWT_SECRET_KEY, {
@@ -19,7 +19,12 @@ const login = async (req, res) => {
     const token = createToken(user._id);
     res.status(200).json({ user, token });
   } catch (error) {
-    res.status(401).json({ error });
+    if (error.message === "Incorrect password") {
+      return res.status(200).json({
+        error: "password dosen't match! Get out bitch!!!",
+      });
+    }
+    res.status(404).json({ error: error.message });
   }
 };
 
