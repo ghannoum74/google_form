@@ -1,27 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import FormButton from "../components/FormButton";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AnimatedPages from "../utilities/AnimatedPages";
+import { useSelector } from "react-redux";
 
-interface ErrorPageProps {
-  status: string;
-  header: string;
-  caption: string;
-}
-
-const ErrorPage: React.FC<ErrorPageProps> = () => {
-  const location = useLocation();
-  const {
-    status = "500",
-    header = "Internal Server Error",
-    caption = "Oops! Something went wrong on our end. Please try refreshing the page or come back later.",
-  } = location.state || {};
+const ErrorPage = () => {
   const navigate = useNavigate();
+  const { caption, header, status } = useSelector(
+    (state) => state.getErrorData.errorData
+  );
   const handleForm = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     navigate("/");
   };
+
+  useEffect(() => {
+    if (!caption && !header && !status) {
+      navigate("/");
+    }
+  }, [caption, header, status, navigate]);
   return (
     <AnimatedPages>
       <div className="errorPage">
@@ -29,7 +27,7 @@ const ErrorPage: React.FC<ErrorPageProps> = () => {
           <div className="status">{status}</div>
           <img
             className="error-img"
-            src="../../public/robot-broken-image-broken-robot-clipart-person-human-transparent-png-2774732-removebg.png"
+            src="../../robot-broken-image-broken-robot-clipart-person-human-transparent-png-2774732-removebg.png"
             // alt="something went wrong"
           />
           <h3 className="header">{header}</h3>

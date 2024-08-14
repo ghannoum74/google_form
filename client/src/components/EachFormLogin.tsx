@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import FormButton from "./FormButton";
 import FormHeader from "./FormHeader";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { updateData } from "../redux/states/loginDataSlics";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,6 +10,8 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import "react-phone-input-2/lib/style.css";
 import useExistingEmail from "../hook/useExistingEmail";
 import useLoginForm from "../hook/useLoginForm";
+import Cookies from "js-cookie";
+import { setFormComplete } from "../redux/states/protectRouteSlice";
 
 interface InputProps {
   id: number;
@@ -58,8 +60,6 @@ const EachFormLogin: React.FC<EachFormLoginProps> = ({ item }) => {
 
   // dispatch to update data
   const dispatch = useDispatch();
-  //  @ts-expect-error
-  const data = useSelector((state) => state.loginData.data);
 
   // to navigate to the next route when everything is done
   const navigate = useNavigate();
@@ -87,26 +87,20 @@ const EachFormLogin: React.FC<EachFormLoginProps> = ({ item }) => {
       Object.entries(value).forEach(([key, value]) => {
         dispatch(updateData({ key, value }));
       });
+      dispatch(setFormComplete(true));
       // because of timing async so i should passed the value for password
       // os when i want to login and try to select the data the password dosent dispatchet yet
       const result = await login(value);
       if (result) {
+        // save the data comes from login with the token in cookie to use it in the next route (successfull)
+        Cookies.set("Token", result.data, {
+          expires: 1,
+          path: "/",
+        });
         navigate(item.next_route);
       }
     }
   };
-
-  // i used useEffect to post because if i used it in the onSubmit the data not contain the password yet
-  // useEffect(() => {
-  //   if (item.name === "password") {
-  //     if (data.password) {
-  //       axios
-  //         .post("http://localhost:5000/auth/login", data)
-  //         .then((response) => console.log(response))
-  //         .catch((err) => console.log(err));
-  //     }
-  //   }
-  // }, [data, item.name]);
 
   return (
     <>
@@ -121,24 +115,46 @@ const EachFormLogin: React.FC<EachFormLoginProps> = ({ item }) => {
           {item.loginInputs.map((input) => (
             // invalid class for the message error appear
             <div className="container-input" key={input.id}>
-              <input
-                className="each-input"
-                required={input.required}
-                name={input.name}
-                maxLength={input.maxlength}
-                // i check first if type == password so i'm in the password-information page and i toggle
-                type={
-                  input.type === "password"
-                    ? isVisible
-                      ? "text"
-                      : "password"
-                    : input.type || ""
-                }
-                min={input.min}
-                max={input.max}
-                onChange={handleData}
-              />
-              <label className="each-label">{input.label}</label>
+              <div className="wrapper-input-passwordIcon">
+                <input
+                  className="each-input"
+                  required={input.required}
+                  name={input.name}
+                  maxLength={input.maxlength}
+                  // i check first if type == password so i'm in the password-information page and i toggle
+                  type={
+                    input.type === "password"
+                      ? isVisible
+                        ? "text"
+                        : "password"
+                      : input.type || ""
+                  }
+                  min={input.min}
+                  max={input.max}
+                  onChange={handleData}
+                />
+                <label className="each-label">{input.label}</label>
+                {item.name === "password" && (
+                  <>
+                    {isVisible ? (
+                      <FontAwesomeIcon
+                        onClick={() => setIsVisible(!isVisible)}
+                        className="show-password-icon inLoginPage"
+                        icon={faEyeSlash}
+                        style={{ color: "#5f6368" }}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        onClick={() => setIsVisible(!isVisible)}
+                        icon={faEye}
+                        style={{ color: "#5f6368" }}
+                        className="show-password-icon inLoginPage"
+                      />
+                    )}
+                  </>
+                )}
+              </div>
+
               {item.name === "email" && (
                 <div
                   className="each-errorMsg"
@@ -171,25 +187,6 @@ const EachFormLogin: React.FC<EachFormLoginProps> = ({ item }) => {
               </Link>
             </div>
           ))}
-          {item.name === "password" && (
-            <>
-              {isVisible ? (
-                <FontAwesomeIcon
-                  onClick={() => setIsVisible(!isVisible)}
-                  className="show-password-icon from-password-information inLoginPage"
-                  icon={faEyeSlash}
-                  style={{ color: "#5f6368" }}
-                />
-              ) : (
-                <FontAwesomeIcon
-                  onClick={() => setIsVisible(!isVisible)}
-                  icon={faEye}
-                  style={{ color: "#5f6368" }}
-                  className="show-password-icon from-password-information inLoginPage"
-                />
-              )}
-            </>
-          )}
 
           <FormButton
             leftBtn={item.leftBtn}

@@ -28,7 +28,7 @@ export const loginInputsData = [
     name: "password",
     header: "Sign in",
     caption: "Enter your password",
-    next_route: "/Succesfull",
+    next_route: "/successfull",
     forgetWord: "Forget Password?",
     to: "login-forget-password",
     loginInputs: [

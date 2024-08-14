@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import "./css/App.css";
 import PersonalDataPage from "./pages/signup/PersonalDataPage";
 import BasicDataPage from "./pages/signup/BasicDataPage";
@@ -12,6 +12,7 @@ import ForgetEmail from "./pages/login/ForgetEmail";
 import FullnameChecking from "./pages/login/FullnameChecking";
 import ErrorPage from "./pages/ErrorPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Successfull from "./pages/Succesfull";
 
 function App() {
   return (
@@ -52,17 +53,12 @@ function App() {
               <ProtectedRoute element={PasswordDataPage} current_route="/" />
             }
           />
+          <Route path="/successfull" element={<Successfull />} />
           {/* <Route
             path="/successfull"
-            element={
-              <ProtectedRoute
-                element={Succe}
-                current_route="/successfull"
-              />
-            }
+            element={<ProtectedRoute element={Successfull} current_route="/" />}
           /> */}
 
-          {/* Catch-all route */}
           <Route path="*" element={<LoginPage />} />
         </Routes>
       </AnimatePresence>

@@ -138,7 +138,7 @@ export const signupInputsData = [
     header: "Create a strong password",
     caption:
       "Create a strong password with a mix of letters, numbers and symbols",
-    next_route: "/succesfull",
+    // next_route: "/succesfull",
     inputs: [
       {
         id: 1,

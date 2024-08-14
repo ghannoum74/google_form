@@ -94,7 +94,7 @@ const EachFormSignup: React.FC<EachFormSignupProps> = ({ item }) => {
     // first validate the inputs value object
     const isValid = validate(value, item.pattern);
     if (isValid) {
-      // check if email in used  in email page when clicking on button
+      // check if email in used  in email page when clicking on button or the phone number
       if (item.name === "email" || item.name === "phone") {
         const exist = await checkExistence(item.name, value);
 
@@ -111,16 +111,20 @@ const EachFormSignup: React.FC<EachFormSignupProps> = ({ item }) => {
             dispatch(setFormComplete(true));
             navigate(item.next_route);
           });
+          // if exist i handle by the InputInvalid comes from useValidation
+          // i handle it on the class name for the container
         }
       } else if (item.name === "password") {
         // so in this case i cannot get the data from store because it dosen't have the password data yet
         // and in case i dispatch and add the data and after it try to passed the whole data for the useSignupForm still it will not contain the password data
-        // because of async js work so i should mix my value which contain the password and the data which contain all other data
+        // because of async js work so i should mix my value which contain the password and the data which contain all other data manualy
         const all_data = { ...data };
         all_data["password"] = value["password"];
         const addData = await signup(all_data);
         if (addData) {
-          toast.success("Form Submit Successfuly!");
+          toast.success("Form Submit Successfuly!", {
+            hideProgressBar: true,
+          });
           navigate(item.next_route);
         } else {
           toast.error(error);
@@ -163,19 +167,14 @@ const EachFormSignup: React.FC<EachFormSignupProps> = ({ item }) => {
     }
   }, [data, item.id]);
 
-  useEffect(() => {
-    toast.success("This is a test toast!");
-  }, []);
-
   return (
     <>
-      <ToastContainer autoClose={100} />
-      {isPending ||
-        (loading && (
-          <div className="loading">
-            <div></div>
-          </div>
-        ))}
+      {(isPending || loading) && (
+        <div className="loading">
+          <div></div>
+        </div>
+      )}
+      <ToastContainer autoClose={1000} />
       <div className="form-container" key={item.id}>
         <FormHeader header={item.header} caption={item.caption} />
         <form className="auth-form" onSubmit={handleForm}>
@@ -263,25 +262,47 @@ const EachFormSignup: React.FC<EachFormSignupProps> = ({ item }) => {
                 }`}
                 key={input.id}
               >
-                <input
-                  title={input.errorsMsgs}
-                  className="each-input"
-                  required={input.required}
-                  name={input.name}
-                  maxLength={input.maxlength}
-                  // i check first if type == password so i'm in the password-information page and i toggle
-                  type={
-                    input.type === "password"
-                      ? isVisible
-                        ? "text"
-                        : "password"
-                      : input.type || ""
-                  }
-                  min={input.min}
-                  max={input.max}
-                  onChange={handleData}
-                />
-                <label className="each-label">{input.label}</label>
+                <div className="wrapper-input-passwordIcon">
+                  <input
+                    title={input.errorsMsgs}
+                    className="each-input"
+                    required={input.required}
+                    name={input.name}
+                    maxLength={input.maxlength}
+                    // i check first if type == password so i'm in the password-information page and i toggle
+                    type={
+                      input.type === "password"
+                        ? isVisible
+                          ? "text"
+                          : "password"
+                        : input.type || ""
+                    }
+                    min={input.min}
+                    max={input.max}
+                    onChange={handleData}
+                  />
+                  <label className="each-label">{input.label}</label>
+                  {/* if i'm in the password page i added like show password checkbox */}
+                  {item.name === "password" && (
+                    <>
+                      {isVisible ? (
+                        <FontAwesomeIcon
+                          onClick={() => setIsVisible(!isVisible)}
+                          className="show-password-icon "
+                          icon={faEyeSlash}
+                          style={{ color: "#5f6368" }}
+                        />
+                      ) : (
+                        <FontAwesomeIcon
+                          onClick={() => setIsVisible(!isVisible)}
+                          icon={faEye}
+                          style={{ color: "#5f6368" }}
+                          className="show-password-icon from-password-information"
+                        />
+                      )}
+                    </>
+                  )}
+                </div>
                 <div className="each-errorMsg">{input.errorsMsgs}</div>
                 {/* if phone number exist this message will show up */}
                 <div
@@ -335,27 +356,6 @@ const EachFormSignup: React.FC<EachFormSignupProps> = ({ item }) => {
                   Gender
                 </label>
               </div>
-            </>
-          )}
-
-          {/* if i'm in the password page i added like show password checkbox */}
-          {item.name === "password" && (
-            <>
-              {isVisible ? (
-                <FontAwesomeIcon
-                  onClick={() => setIsVisible(!isVisible)}
-                  className="show-password-icon from-password-information"
-                  icon={faEyeSlash}
-                  style={{ color: "#5f6368" }}
-                />
-              ) : (
-                <FontAwesomeIcon
-                  onClick={() => setIsVisible(!isVisible)}
-                  icon={faEye}
-                  style={{ color: "#5f6368" }}
-                  className="show-password-icon from-password-information"
-                />
-              )}
             </>
           )}
           <FormButton

@@ -2,6 +2,7 @@
   --blue: #0b57d0;
   --grey: rgb(95, 99, 104);
   --errorColor: rgb(217, 48, 37);
+  --box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.149);
   box-sizing: border-box;
 }
 
@@ -50,7 +51,8 @@ img {
 .PasswordPage,
 .forgetEmailPage,
 .phoneNumberInfo,
-.errorPage {
+.errorPage,
+successfulPage {
   border: 1px solid #dadce0;
   overflow: hidden;
 }
@@ -84,8 +86,9 @@ img {
   width: 100%;
   padding: 0.6rem;
   border-radius: 0.2rem;
-  border: 1px solid #dadce0;
   background-color: transparent;
+  border: none;
+  box-shadow: 0 0 0 1px #dadce0;
 }
 
 .container-input .each-label {
@@ -118,7 +121,7 @@ img {
 
 .each-input:focus {
   outline: none;
-  border: 2px solid var(--blue);
+  box-shadow: 0 0 0 1.3px var(--blue);
 }
 
 /*Error message*/
@@ -224,25 +227,7 @@ img {
   flex: 1;
 }
 
-/* style show password checkbox */
-.checkbox-password {
-  position: relative;
-}
-
-.show-password-icon {
-  position: absolute;
-  left: 91%;
-  bottom: 55%;
-  cursor: pointer;
-}
-
-.from-password-information {
-  position: absolute;
-  left: 83%;
-  bottom: 31%;
-  cursor: pointer;
-}
-
+/* style show password icon */
 .custom-phone-input .form-control {
   width: 100% !important;
 }
@@ -274,8 +259,15 @@ img {
   position: relative;
 }
 
-.inLoginPage {
-  bottom: 36%;
+.wrapper-input-passwordIcon {
+  position: relative;
+}
+
+.show-password-icon {
+  position: absolute;
+  top: 32%;
+  left: 90%;
+  cursor: pointer;
 }
 
 /* styling loading bar */
@@ -329,12 +321,445 @@ img {
   }
 }
 
-/* remove the bar from toast */
-.Toastify__progress-bar,
-.Toastify__progress-bar--bg {
-  display: none;
+.Toastify__progress-bar {
+  background-color: transparent !important;
 }
 
-.Toastify__toast-container svg {
-  fill: var(--blue);
+.Toastify__progress-bar--animated {
+  background-color: transparent !important;
+}
+
+.Toastify__progress-bar--error {
+  background-color: transparent !important;
+}
+.Toastify__progress-bar--success {
+  background-color: transparent !important;
+}
+/* style successful page */
+.successfulPage {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.container-successful {
+  margin: 3% 14%;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 35px);
+}
+
+.successfulPage .header {
+  margin: 0;
+  font-weight: 400;
+}
+
+.header-successful {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.buttons {
+  font-weight: 500;
+}
+
+.buttons.invalid .cancel,
+.buttons.invalid .save {
+  border: 1px solid rgb(0 0 0 / 0.1);
+  padding: 3px 10px;
+  cursor: pointer;
+  border-radius: 3px;
+  background-color: rgb(0 0 0 / 0.1);
+}
+
+.buttons .cancel,
+.buttons .save {
+  padding: 3px 10px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.buttons .save {
+  display: flex;
+  margin-left: 10px;
+  background-color: #03a9f4;
+  color: white;
+  border-color: transparent;
+}
+
+.save svg {
+  align-self: center;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+}
+
+.save-btn {
+  border: none;
+  margin-left: 5px;
+}
+
+.buttons .cancel {
+  background-color: transparent;
+  border: 1px solid rgb(0 0 0 / 0.3);
+}
+
+.buttons.invalid .cancel {
+  color: rgb(0 0 0 / 0.1);
+}
+
+.buttons.invalid .cancel,
+.buttons.invalid .save {
+  cursor: not-allowed;
+}
+
+.buttons.valid .cancel:hover {
+  background-color: #9e9e9e2e;
+}
+
+.buttons.valid .save:hover {
+  background-color: #008bca;
+}
+
+/* style card data */
+.basic-card {
+  box-shadow: var(--box-shadow);
+  border-radius: 8px;
+}
+
+.each-card {
+  padding-top: 30px;
+}
+
+/* Scrollbar styles */
+.container-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+  padding: 1px;
+  margin: 2em 0;
+}
+.container-card::-webkit-scrollbar {
+  width: 4px;
+  visibility: hidden;
+}
+
+.container-card::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+  visibility: hidden;
+}
+
+.container-card::-webkit-scrollbar-thumb {
+  background: #c6c6c6;
+  border-radius: 10px;
+  visibility: hidden;
+}
+
+.container-card::-webkit-scrollbar-thumb:hover {
+  background: #555;
+  cursor: pointer;
+}
+
+.container-card:hover::-webkit-scrollbar,
+.container-card:hover::-webkit-scrollbar-track,
+.container-card:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+}
+
+.basic-card .card-header {
+  padding: 10px 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+  font-weight: 600;
+}
+
+.container-basic-data {
+  padding: 10px 15px;
+  display: flex;
+  gap: 20px;
+}
+.profile-picture {
+  padding: 2rem;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ddd;
+}
+
+.profile-picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-picture input[type="file"] {
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+}
+
+.main-data .name {
+  font-weight: 500;
+}
+
+.id {
+  color: var(--grey);
+  display: inline;
+  padding-right: 7px;
+}
+
+.change-password-btn {
+  box-shadow: var(--box-shadow);
+  padding: 5px 10px;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  width: fit-content;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.change-password-btn svg {
+  padding-right: 5px;
+}
+
+.change-password-btn:hover {
+  background-color: rgb(0, 0, 0, 0.06);
+}
+
+/* style basic info box */
+.container-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 10px 20px;
+}
+
+.container-success-box {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 calc(50% - 20px);
+}
+.container-success-box:nth-child(3),
+.container-success-box:nth-child(4),
+.container-success-box:nth-child(5) {
+  flex: 1 1 calc(33.3% - 20px);
+}
+
+.success-label {
+  font-family: Roboto, RobotoFallback, Noto Kufi Arabic, Helvetica, Arial,
+    sans-serif;
+  color: rgba(0, 0, 0, 0.6);
+  margin: 0 0 5px 15px;
+  font-size: 12px;
+}
+
+.wrapper-before {
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.success-input {
+  width: 100%;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.6);
+  padding: 5px 15px;
+  background-color: rgba(0, 0, 0, 0.04);
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  font-size: 14px;
+}
+
+.wrapper-before::before {
+  content: "";
+  width: 0;
+  height: 2px;
+  background-color: #03a9f4;
+  position: absolute;
+  top: 98%;
+  left: 50%;
+  transition: 0.5s;
+}
+
+.focused::before {
+  width: 100%;
+  left: 0;
+}
+
+.success-input:hover {
+  background-color: rgba(0, 0, 0, 0.09);
+}
+
+.success-input:focus {
+  outline: none;
+}
+
+/* last two cards */
+.container-last-cards {
+  display: flex;
+  gap: 20px;
+}
+
+.container-last-cards .basic-card {
+  flex: 1 1 50%;
+}
+
+/* second card */
+.at-sign {
+  padding: 0.7rem;
+  background-color: #f6281930;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* third card */
+.lock-icon {
+  background-color: #03a9f429;
+  padding: 0.7rem;
+  border-radius: 50%;
+  padding: 0.7rem;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* styling password pupop */
+.bg {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+}
+
+.bg.visible {
+  visibility: visible;
+}
+
+.pupop {
+  width: 30%;
+}
+
+.container-pupop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background-color: #fff;
+  padding: 0.5em 1.5em;
+  border-radius: 5px;
+}
+
+.container-pupop {
+  color: #545454;
+}
+
+.container-pupop h2 {
+  padding: 24px 30px 0;
+  font-size: 30px;
+}
+
+.pupop-submit {
+  color: #fff;
+  border: none;
+  background-color: #03a9f4;
+  padding: 3px 10px;
+  cursor: pointer;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.pupop-submit:hover {
+  background-color: #008bca;
+}
+
+.pupop-submit:active {
+  box-shadow: 0 0 0 3px #98c8de;
+  transform: translateY(-1px);
+}
+
+/* style loading spinner */
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #008bca;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  position: relative;
+  animation: pulse 1s linear infinite;
+}
+.loader:after {
+  content: "";
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border: 5px solid #008bca;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  animation: scaleUp 1s linear infinite;
+}
+
+@keyframes scaleUp {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  60%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+@keyframes pulse {
+  0%,
+  60%,
+  100% {
+    transform: scale(1);
+  }
+  80% {
+    transform: scale(1.2);
+  }
 }

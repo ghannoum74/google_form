@@ -14,7 +14,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const isFormComplete = useSelector(
     (state) => state.formCompletion.isFormComplete
   );
-
+  console.log(isFormComplete);
   // If form is not complete, redirect to the login page or any other appropriate page
   if (!isFormComplete) {
     return <Navigate to={current_route} replace />;
