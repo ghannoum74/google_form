@@ -8,8 +8,8 @@ export const loginInputsData = [
     next_route: "/login-password",
     leftBtn: "Create Account",
     rightBtn: "Next",
-    forgetWord: "Forget Email?",
-    to: "login-forget-email",
+    // forgetWord: "Forget Email?",
+    to: "/login-forget",
     loginInputs: [
       {
         id: 1,
@@ -30,7 +30,7 @@ export const loginInputsData = [
     caption: "Enter your password",
     next_route: "/successfull",
     forgetWord: "Forget Password?",
-    to: "login-forget-password",
+    to: "/login-forget",
     loginInputs: [
       {
         id: 1,
@@ -49,11 +49,11 @@ export const loginInputsData = [
   },
   {
     id: 3,
-    name: "forgetEmail",
+    name: "forget",
     header: "Find your email",
     caption: "Enter your phone number",
     next_route: "/checking-account-name",
-    to: "login-forget-password",
+    to: "login-forget",
     loginInputs: [
       {
         id: 1,
@@ -62,8 +62,7 @@ export const loginInputsData = [
         maxlength: 30,
         required: true,
         label: "Phone number",
-        errorsMsgs:
-          "phone number should contain 8 digits start by (81|71|76|03|70) without any space or special charactere",
+        errorsMsgs: "phone number dosen't exist!. Try with valid one.",
       },
     ],
     pattern: "^(81|76|77|03|71|70)[0-9]{6}$",
@@ -99,6 +98,27 @@ export const loginInputsData = [
     ],
 
     pattern: "^[A-Za-z]+(?:[ '\\-][A-Za-z]+)*$",
+    rightBtn: "Next",
+  },
+  {
+    id: 5,
+    name: "verifyCode",
+    header: "Enter your verification code",
+    caption:
+      "verification code has been sent to your phone number. plz check your message inbox",
+    next_route: "/",
+    // to: "login-forget-password",
+    loginInputs: [
+      {
+        id: 1,
+        name: "verficationCode",
+        type: "text",
+        maxlength: 4,
+        required: true,
+        label: "Enter your code",
+        errorsMsgs: "Incorrect verification code!",
+      },
+    ],
     rightBtn: "Next",
   },
 ];

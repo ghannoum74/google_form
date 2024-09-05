@@ -4,11 +4,10 @@ import {
   faFloppyDisk,
   faKey,
   faLock,
-  faMap,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,11 +15,12 @@ import { clearErrorData, setErrorData } from "../redux/states/ErrorDataSlice";
 import { useNavigate } from "react-router-dom";
 import { signupInputsData } from "../utilities/signupInputsData";
 import { addData } from "../redux/states/FullUserDataSlice";
-import PupopPassword from "../components/PupopPassword";
 import { AnimatePresence } from "framer-motion";
 import useUpdateForm from "../hook/useUpdateForm";
 import { toast, ToastContainer } from "react-toastify";
 import AnimatedPages from "../utilities/AnimatedPages";
+import PupopLogin from "../components/pupop/PupopLogin";
+
 const Successfull = () => {
   const [inputFocused, setInputFocused] = useState("");
   const [invalidBtn, setInvalidBtn] = useState(true);
@@ -48,6 +48,7 @@ const Successfull = () => {
         }
       );
       console.log(result.data);
+
       // Handle successful result here
       dispatch(addData(result.data));
     } catch (error) {
@@ -73,7 +74,7 @@ const Successfull = () => {
     if (!full_data || Object.keys(full_data).length === 0) {
       fetchUserData();
     }
-  }, []);
+  }, [full_data, dispatch, navigate]);
 
   // the buttons will appears only when the data filled by data
   useEffect(() => {
@@ -100,7 +101,7 @@ const Successfull = () => {
 
   const checkingData = (data: object) => {
     // Create an object to hold the changed data
-    const changedData: { [key: string]: any } = {};
+    const changedData: { [key: string] } = {};
 
     // Iterate over the keys
     Object.keys(data).forEach((key) => {
@@ -123,6 +124,7 @@ const Successfull = () => {
       const result = await update(changableData, full_data._id);
       if (result) {
         toast.success("Form Updated Successfuly!", { autoClose: 500 });
+        // dispatch(addData(changableData));
         setChangableData({});
       } else {
         toast.error("Error with updating...");
@@ -134,9 +136,24 @@ const Successfull = () => {
 
   return (
     <>
+      <ToastContainer />
+      <div
+        className="overlay"
+        style={{
+          display: isPuped ? "block" : "none",
+        }}
+        onClick={() => setIsPuped(false)}
+      ></div>
+      <AnimatePresence>
+        {isPuped && (
+          <div className="pupop">
+            <PupopLogin setIsPuped={setIsPuped} />
+          </div>
+        )}
+      </AnimatePresence>
       {full_data || loading ? (
         <AnimatedPages>
-          <ToastContainer />
+          {/* <ToastContainer /> */}
           <form className="successfulPage" onSubmit={handleForm}>
             <div className="container-successful">
               <div className="header-successful">
@@ -165,7 +182,7 @@ const Successfull = () => {
                         <div className="name">
                           {full_data.firstname}&nbsp;{full_data.lastname}
                         </div>
-                        <div className="id"></div>
+                        <div className="id">{full_data._id}</div>
                         <FontAwesomeIcon
                           icon={faCopy}
                           style={{ color: "#5f6368", cursor: "pointer" }}
@@ -375,7 +392,9 @@ const Successfull = () => {
                               onChange={handleData}
                               className="success-input"
                               pattern="^(81|76|77|03|71|70)[0-9]{6}$"
-                              title="phone number should contain 8 digits start by (81|71|76|03|70) without any space or special charactere"
+                              title="you cannot change the phonenumber"
+                              disabled
+                              style={{ cursor: "not-allowed" }}
                               defaultValue={full_data.phoneNumber}
                             />
                           </div>
@@ -444,11 +463,6 @@ const Successfull = () => {
                 </div>
               </div>
             </div>
-            <AnimatePresence>
-              {isPuped && (
-                <PupopPassword togglePupop={isPuped} setToggle={setIsPuped} />
-              )}
-            </AnimatePresence>
           </form>
         </AnimatedPages>
       ) : (

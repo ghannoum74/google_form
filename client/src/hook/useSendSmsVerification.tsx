@@ -1,29 +1,29 @@
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setErrorData } from "../redux/states/ErrorDataSlice";
+import { useNavigate } from "react-router-dom";
 
-const useSignupForm = () => {
-  const [loading, setIsLoading] = useState(false);
+const useSendSmsVerification = () => {
+  const [pending, setPending] = useState(false);
   const [error, setError] = useState<string>("");
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const signup = async (data: object) => {
-    // dispatch(clearErrorData());
-    setIsLoading(true);
+  const sendSms = async (phoneNumber: object) => {
+    setPending(true);
+    setError("");
     try {
       const response = await axios.post(
-        "http://localhost:5000/auth/signup",
-        data
+        "http://localhost:5000/auth/send-sms",
+        phoneNumber
       );
       if (response.data.error) {
+        console.log(response.data.error);
         setError(response.data.error);
         return false;
       }
       console.log(response);
-      setError("");
       return true;
     } catch (error) {
       console.log(error);
@@ -36,9 +36,9 @@ const useSignupForm = () => {
       );
       navigate("/error-page");
     } finally {
-      setIsLoading(false);
+      setPending(false);
     }
   };
-  return { signup, loading, error };
+  return { sendSms, pending };
 };
-export default useSignupForm;
+export default useSendSmsVerification;

@@ -52,7 +52,10 @@ img {
 .forgetEmailPage,
 .phoneNumberInfo,
 .errorPage,
-successfulPage {
+.forgetEmail,
+.forgetPassword,
+.successfulPage,
+.verificationPage {
   border: 1px solid #dadce0;
   overflow: hidden;
 }
@@ -261,6 +264,7 @@ successfulPage {
 
 .wrapper-input-passwordIcon {
   position: relative;
+  margin-top: 20px;
 }
 
 .show-password-icon {
@@ -336,6 +340,15 @@ successfulPage {
   background-color: transparent !important;
 }
 /* style successful page */
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0 0 0 /0.5);
+  filter: blur(0.5px);
+  z-index: 100;
+}
+
 .successfulPage {
   width: 100vw;
   height: 100vh;
@@ -655,26 +668,14 @@ successfulPage {
 }
 
 /* styling password pupop */
-.bg {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  visibility: hidden;
-}
-
-.bg.visible {
-  visibility: visible;
-}
 
 .pupop {
-  width: 30%;
+  opacity: 1;
+  will-change: auto;
+  transform: none;
+  position: fixed;
+  width: 31%;
+  z-index: 1000;
 }
 
 .container-pupop {
@@ -698,6 +699,8 @@ successfulPage {
 }
 
 .pupop-submit {
+  margin-top: 15px;
+  width: 100%;
   color: #fff;
   border: none;
   background-color: #03a9f4;

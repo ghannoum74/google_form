@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addData } from "../redux/states/FullUserDataSlice";
 import { setErrorData } from "../redux/states/ErrorDataSlice";
@@ -22,13 +22,6 @@ const useUpdateForm = () => {
       return result.data ? true : false;
     } catch (error) {
       console.log(error);
-      //   dispatch(
-      //     setErrorData({
-      //       header: "Internal Server Error",
-      //       caption: error?.response.data.message,
-      //       status: error?.response.status,
-      //     })
-      //   );
       navigate("/error-page");
     } finally {
       setLoading(false);

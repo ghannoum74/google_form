@@ -8,7 +8,11 @@ const createToken = (_id) => {
 };
 
 const createNewUser = async (req, res) => {
-  console.log(req.body);
+  // if (req.user) {
+  //   return res
+  //     .status(401)
+  //     .json({ message: "Already logged in. Cannot sign up again." });
+  // }
   const { error } = validationSignup.validate(req.body);
   if (error) {
     return res.status(400).json(error.details[0].message);
@@ -39,7 +43,28 @@ const createNewUser = async (req, res) => {
     const token = createToken(user._id);
     res.status(200).json({ user, token });
   } catch (error) {
-    res.status(401).json({ message: error.message });
+    console.log(error.message);
+    if (error.message === "all fields must be fieled!") {
+      return res.status(400).json({
+        message:
+          "An error occurred while setting up the request. Please try again or check your network connection.",
+      });
+    } else if (error.message === "Phone number already in use!")
+      res.status(400).json({
+        message: "Phone already in use",
+      });
+    else if (error.message === "Email already in use!") {
+      res.status(400).json({
+        message: "Email already in use!",
+      });
+    } else {
+      res
+        .status(500)
+        .json({
+          message:
+            "Oops! Something went wrong on our end. Please try refreshing the page or come back later.",
+        });
+    }
   }
 };
 

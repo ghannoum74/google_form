@@ -1,29 +1,21 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { clearErrorData, setErrorData } from "../redux/states/ErrorDataSlice";
-const useLoginForm = () => {
-  // because of timing for async i should get the data which contain only email
-  // then merge it with the value which contain the password
-  const data = useSelector((state) => state.loginData.data);
-  const email = { ...data };
+import { setErrorData } from "../redux/states/ErrorDataSlice";
+const useUpdatedLogin = () => {
   const [load, setLoad] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const login = async (value: object) => {
-    dispatch(clearErrorData());
-    // now i should merge the data
-    email["password"] = value["password"];
-    const final_data = email;
+
+  // i create my update login instead of the login because in this case i have the email and password stored in the local state
+  // but in the login form the email is stored in global state and the password in the local because of pages
+  const login = async (data: object) => {
     setLoad(true);
-    console.log(final_data);
+
     try {
-      const result = await axios.post(
-        "http://localhost:5000/auth/login",
-        final_data
-      );
+      const result = await axios.post("http://localhost:5000/auth/login", data);
       if (result.data.error) {
         setError(result.data.error);
         return false;
@@ -59,4 +51,4 @@ const useLoginForm = () => {
   };
   return { login, load, error };
 };
-export default useLoginForm;
+export default useUpdatedLogin;

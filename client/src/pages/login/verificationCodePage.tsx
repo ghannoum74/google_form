@@ -2,16 +2,15 @@
 import EachFormLogin from "../../components/login/EachFormLogin";
 import AnimatedPages from "../../utilities/AnimatedPages";
 import { loginInputsData } from "../../utilities/loginInputsData";
-
-const PasswordPage = () => {
+const verificationCodePage = () => {
   return (
-    <div className="PasswordPage">
+    <div className="verificationPage">
       <AnimatedPages>
         {/* @ts-expect-error */}
-        <EachFormLogin item={loginInputsData[1]} />
+        <EachFormLogin item={loginInputsData[4]} />
       </AnimatedPages>
     </div>
   );
 };
 
-export default PasswordPage;
+export default verificationCodePage;

@@ -3,12 +3,8 @@ import React, { ReactNode } from "react";
 
 interface AnimatedPagesProps {
   children: ReactNode;
-  isVisible: boolean;
 }
-const AnimatedPopup: React.FC<AnimatedPagesProps> = ({
-  children,
-  isVisible,
-}) => {
+const AnimatedPopup: React.FC<AnimatedPagesProps> = ({ children }) => {
   const animations = {
     initial: { scale: 0.5, opacity: 0 },
     animate: { scale: 1, opacity: 1 },
@@ -16,10 +12,9 @@ const AnimatedPopup: React.FC<AnimatedPagesProps> = ({
   };
   return (
     <motion.div
-      className="pupop"
       variants={animations}
       initial="initial"
-      animate={isVisible ? "animate" : "exit"}
+      animate="animate"
       exit="exit"
       transition={{ duration: 0.2 }}
     >

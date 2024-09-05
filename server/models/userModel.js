@@ -98,15 +98,17 @@ userSchema.statics.signup = async function (
   ) {
     throw Error("all fields must be fieled!");
   }
+  // in my case it's not important to handle this error because i have already api to check email
   const existEmail = await this.findOne({ email });
   if (existEmail) {
     throw Error("Email already in use!");
   }
 
-  // const existphoneNumber = await this.findOne({ phoneNumber });
-  // if (existphoneNumber) {
-  //   throw Error("Phone number already in use!");
-  // }
+  // in my case it's not important to handle this error because i have already api to check phone number
+  const existphoneNumber = await this.findOne({ phoneNumber });
+  if (existphoneNumber) {
+    throw Error("Phone number already in use!");
+  }
 
   try {
     const salt = await bcrypt.genSalt(10);

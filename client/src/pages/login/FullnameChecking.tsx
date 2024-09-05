@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import EachFormLogin from "../../components/EachFormLogin";
+import EachFormLogin from "../../components/login/EachFormLogin";
 import AnimatedPages from "../../utilities/AnimatedPages";
 import { loginInputsData } from "../../utilities/loginInputsData";
 
